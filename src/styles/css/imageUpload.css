@@ -1,0 +1,21 @@
+#profile{
+    background-color: #f4f3f8;
+    width: 250px;
+    height: 150px;
+    position: relative;
+    top: 40px;
+    left: 20px;
+    border-radius: 10px;
+}
+#addProfilebtn{
+    width: fit-content;
+    position: absolute;
+}
+#profilePic{
+    width: 100%;
+    height: 150px;
+}
+#istrueProfilePic{
+    display: flex;
+
+}

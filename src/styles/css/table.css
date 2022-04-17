@@ -1,0 +1,51 @@
+#parentContainer{
+    width: 100%;
+}
+#table{
+    position: absolute;
+    top: 120px;
+    width: 100%;
+    table-layout: 100%;
+}
+#tableHeader{
+    text-align: left;
+    width: 100%;
+}
+#itemheaderinput{
+    background-color: #242424;
+    border: 0;
+    color: white;
+    width: calc(100%);
+    position: relative;
+}
+#tbody{
+    width: 100%;
+}
+#thOtherLabels{
+    background-color: #242424;
+    border: 0;
+    width: calc(100%);
+    color: white;
+}
+#tbodyinputfields{
+    position: relative;
+    /* width: 100%; */
+    background-color: aliceblue;
+    height: 30px;
+    left: 0px;
+    top: 10px;
+    border: 0;
+    border-radius: 10px;
+}
+#calculationPart{
+    /* display: flex;
+    flex-direction: column; */
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+#subTotal{
+    border: 0;
+    text-align: right;
+    margin-right: 20px;
+}

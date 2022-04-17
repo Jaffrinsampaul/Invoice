@@ -1,0 +1,37 @@
+#parentSection{
+    width: 60%;
+    height: 45vh;
+    position: relative;
+    top: 40px;
+    left: 40px;
+    background-color: white;
+}
+#shipingDetials{
+    display: flex;
+    flex-direction: row;
+    margin-left: 40px;
+}
+#shipingDetialsBillTo{
+    text-align: left;
+    position: absolute;
+    /* top: 20px; */
+    left: 20px;
+}
+#headerStyle{
+    margin: 0;
+    margin-bottom: 15px;
+    position: absolute;
+    left: 20px;
+}
+#shipingDetialsBilTxtfield{
+    border: 0;
+    border-radius: 10px;
+    height: 30px;
+    width: 300px;
+    background-color: #f4f3f8;
+}
+#shipingDetialsshipTo{
+    position: absolute;
+    right: 20px;
+    text-align: left;
+}
