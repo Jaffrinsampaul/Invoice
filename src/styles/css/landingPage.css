@@ -1,0 +1,32 @@
+#parent{
+    display: flex;
+    flex-direction: column;
+    background-color: #f4f3f8;
+    height: 150vh;
+    max-height: 180vh;
+}
+#rightSideDiv{
+    position: relative;
+    right: 0;
+    top: 100px;
+    
+}
+#currency{
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    right: 16%;
+    top: 80px;
+}
+#currency input{
+    border: 0;
+    position: relative;
+    width: "10px"; 
+    margin-right: 0;
+    top: 25px;
+    text-align: right;
+    height: 40px;
+    font-weight: bold;
+    font-size: medium;
+    background-color: #f4f3f8;
+}

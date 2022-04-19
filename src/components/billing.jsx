@@ -6,23 +6,34 @@ const Billing =(props)=>{
 
     const labelContent = props.content
 
-    const handleParentMethod = props.methods
+    const handlelabelChange =(ent)=>{
+        const name = ent.target.name
+        const value = ent.target.value
+
+        props.methods(name, value)
+    }
 
     return(
         <section id="parentSection">
             <section id="shipingDetials">
 
                 <section id="shipingDetialsBillTo">
-                    <h1 >{labelContent.billTo}</h1>
-                    <input type="text" id="shipingDetialsBilTxtfield"/>
+                    
+                    <input type="text" name="billTo" value={labelContent.billTo} 
+                       style={{width: "95%", borderRadius: "10px" ,height:"20px"}} onChange={handlelabelChange}
+                    />
+                    <input type="text" name="" id="shipingDetialsBilTxtfield" onChange={handlelabelChange}/>
                 </section>
-
+                
                 <section id="shipingDetialsshipTo">
-                    <h1>{labelContent.shipTo}</h1>
-                    <input type="text" id="shipingDetialsBilTxtfield"/>
+                    <input type="text" name="shipTo" value={labelContent.shipTo} 
+                        style={{width: "95%", borderRadius: "10px" ,height:"20px"}} onChange={handlelabelChange}
+                    />
+                    <input type="text" id="shipingDetialsBilTxtfield2" onChange={handlelabelChange}/>
                 </section>
             </section>
-            <BiilingTable content={labelContent} methods={handleParentMethod}/>
+            
+            <BiilingTable content={labelContent} methods={props.methods}/>
         </section>
     )
 }

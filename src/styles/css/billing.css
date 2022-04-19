@@ -1,37 +1,57 @@
 #parentSection{
     width: 60%;
-    height: 45vh;
-    position: relative;
-    top: 40px;
-    left: 40px;
+    height: 90%;
+    /* min-height: 100vh; */
+    /* max-height: 500vh; */
+    margin-left: 40px;
     background-color: white;
 }
 #shipingDetials{
-    display: flex;
-    flex-direction: row;
-    margin-left: 40px;
+    position: relative;
+    top: 30px;
 }
 #shipingDetialsBillTo{
     text-align: left;
-    position: absolute;
-    /* top: 20px; */
+    position: relative;
+    display: flex;
+    width: 45%;
+    flex-direction: column;
     left: 20px;
 }
-#headerStyle{
-    margin: 0;
-    margin-bottom: 15px;
-    position: absolute;
-    left: 20px;
+#shipingDetialsBillTo input{
+    border: 0;
 }
+
 #shipingDetialsBilTxtfield{
     border: 0;
     border-radius: 10px;
     height: 30px;
-    width: 300px;
+    width: 95%;
+    margin-top: 10px;
+    float: right;
+    background-color: #f4f3f8;
+}
+
+#shipingDetialsBilTxtfield2{
+    border: 0;
+    border-radius: 10px;
+    height: 30px;
+    width: 95%;
+    margin-top: 10px;
+    float: right;
     background-color: #f4f3f8;
 }
 #shipingDetialsshipTo{
+    display: flex;
+    flex-direction: column;
     position: absolute;
-    right: 20px;
+    right: 10px;
+    top: 0px;
+
+    width: 45%;
+    float: right;
     text-align: left;
+}
+#shipingDetialsshipTo input{
+    border: 0;
 }

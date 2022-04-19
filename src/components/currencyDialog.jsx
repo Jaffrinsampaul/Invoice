@@ -1,22 +1,46 @@
 import * as React from 'react';
 import { useTheme } from '@mui/material/styles';
+
+import "../styles/css/currencyDialog.css" 
 import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { colors } from '../styles/colors';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import Slide from '@mui/material/Slide';
+import CloseIcon from '@mui/icons-material/Close';
+import { styles } from '../styles/btnstyle/btnStyle';
+import search from "../asset/search.svg"
+import { useState } from 'react';
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
 
-const names = [
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
+
+export default function CurrencyDialogBox() {
+  const [selectedCurrency, setSelectedCurrency]=useState({})
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const names = [
     {
         contryName: "Japan",
         symbol: "¥",
@@ -44,62 +68,64 @@ const names = [
     },
 ];
 
-function getStyles(name, personName, theme) {
-  return {
-    fontWeight:
-      personName.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
-
-export default function CurrencyDialogBox() {
-  const theme = useTheme();
-  const [personName, setPersonName] = React.useState([]);
-
-  const handleChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setPersonName(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
-    console.log(personName)
-  };
+  const handleChange =(e, countryName, symbol)=>{
+    setSelectedCurrency({name: countryName, sym: symbol})
+    setOpen(false)
+  }
 
   return (
-    <div>
-      <FormControl sx={{ m: 1, width: 300, mt: 3 }}>
-        <Select
-          displayEmpty
-          value={personName}
-          onChange={handleChange}
-          input={<OutlinedInput />}
-          renderValue={(selected) => {
-            if (selected.length === 0) {
-              return <em>{personName}</em>;
-            }
+    <div 
+      style={{display:"flex", 
+          color: colors.lightGreen, 
+          marginTop: "20px",
+           marginLeft: "10px"
+          }}>
 
-            return selected.join(', ');
-          }}
-          MenuProps={MenuProps}
-          inputProps={{ 'aria-label': 'Without label' }}
+      <p onClick={handleClickOpen} 
+          style={{margin: 0, marginTop: "14px"}}>
+        {selectedCurrency.name}
+      </p>
+      
+      <select id="selectMenu" value={selectedCurrency.name} onClick={handleClickOpen}></select>
+        <Dialog
+          open={open}
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={handleClose}
+          aria-describedby="alert-dialog-slide-description"
         >
-          <MenuItem disabled value="">
-            <em>{}</em>
-          </MenuItem>
-          {names.map((name, index) => (
-            <MenuItem
-              key={index}
-              value={name.symbol}
-              style={getStyles(name, personName, theme)}
-            >
-              {name.contryName}  {name.symbol}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+          <DialogTitle style={{textAlign: "center", fontSize: "30px", fontWeight: "bold"}}
+          >Select Currency <CloseIcon onClick={handleClose} style={styles.closeBtn}/></DialogTitle>
+          <section id="seachbarDiv">
+            
+            <img src={search} alt="seach" style={{width:"20px"}}/>
+            <input type="text" id='searchbar'/>
+          </section>
+          <DialogContent>
+              {
+                names.map((obj, index)=>{
+                  return(
+                    <MenuItem style={{
+                      display: "flex",flexDirection: "row",
+                      width: "400px",
+                      value: obj.contryName
+                    }} id ={index} onClick={(e)=>{handleChange(e, obj.contryName, obj.symbol)}}>
+                      <section>
+                        {obj.contryName}
+                      </section>
+                      <MenuItem style={{
+                        position: "absolute",right: 0
+                      }}>
+                        {obj.symbol}
+                        <NavigateNextIcon/>
+                      </MenuItem>
+                    </MenuItem>
+                  )
+                })
+              }
+            {/* </Select> */}
+          </DialogContent>
+        </Dialog>
     </div>
   );
 }

@@ -1,51 +1,119 @@
-#parentContainer{
+
+table{
+    position: relative;
+    top: 50px;
     width: 100%;
-}
-#table{
-    position: absolute;
-    top: 120px;
-    width: 100%;
-    table-layout: 100%;
+    height: auto;
+    padding: 10px;
 }
 #tableHeader{
     text-align: left;
-    width: 100%;
 }
 #itemheaderinput{
     background-color: #242424;
     border: 0;
     color: white;
-    width: calc(100%);
-    position: relative;
-}
-#tbody{
-    width: 100%;
 }
 #thOtherLabels{
     background-color: #242424;
     border: 0;
-    width: calc(100%);
+    width: 50%;
     color: white;
 }
 #tbodyinputfields{
-    position: relative;
-    /* width: 100%; */
-    background-color: aliceblue;
+    background-color: #f0f8ff;
     height: 30px;
-    left: 0px;
-    top: 10px;
+    margin-top: 10px;
     border: 0;
+    width: 50%;
     border-radius: 10px;
+    font-weight: bold;
 }
+#tbodyinputfields:first-child{
+    width: 90%;
+}
+
 #calculationPart{
-    /* display: flex;
-    flex-direction: column; */
-    position: absolute;
-    bottom: 0;
-    right: 0;
+    position: relative;
+    float: right;
+    height: auto;
+    top: 150px;
 }
 #subTotal{
+    position: relative;
     border: 0;
     text-align: right;
     margin-right: 20px;
+    width: 150px;
+    font-size: medium;
+}
+#discount,#tax{
+    position: relative;
+    color: blue;
+    border: 0;
+    text-align: right;
+    margin-right: 20px;
+    width: 150px;
+    font-size: medium;
+}
+#total{
+    position: relative;
+    border: 0;
+    text-align: right;
+    margin-right: 20px;
+    width: 150px;
+    font-size: 25px;
+    font-weight: bold;
+}
+#subTotalinput{
+    border: 0;
+    text-align: right;
+    width: 60px;
+    margin-right: 20px;
+    margin-bottom: 15px;
+    font-size: large;
+    font-weight: 540;
+}
+#amountPaid, #balanceDue{
+    position: relative;
+    border: 0;
+    text-align: right;
+    margin-right: 20px;
+    width: 150px;
+    font-size: 15px;
+    font-weight: bold;
+}
+#termCondition{
+    position: relative;
+    float: left;
+    top: 140px;
+    width: 60%;
+    height: auto;
+    bottom: 40px;
+    display: flex;
+    flex-direction: column;
+}
+#noteLabel{
+    border: 0;
+    position: relative;
+    left: 20px;
+    height: 50px;
+    font-size: larger;
+    bottom: 10px;
+    width:100px;
+}
+#noteInput{
+    resize: none;
+    border: 0;
+    position: relative;
+    left: 45px;
+    font-family: 'Gill Sans';
+    font-size: larger;
+    width: 100%;
+    font-size: x-large;
+    height: 90px;
+    margin-bottom: 40px;
+    border-radius: 10px;
+    background-color: aliceblue;
+    padding: 10px;
 }

@@ -62,8 +62,8 @@ const NavBar =(props)=>{
                <ImageUpload/>
                <section id="leftSectionBillingSide">
                         <input type="text" name="billFrom" id="header" value={content.billFrom} onChange={handlelabelChange}/>
+                        <textarea type="text" placeholder="" id="leftSectionBillingSideInputfield"/>
                    <form action="">
-                        <input type="text" placeholder="" id="leftSectionBillingSideInputfield"/>
                    </form>
                </section>
 

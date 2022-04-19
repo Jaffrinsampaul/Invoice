@@ -1,21 +1,27 @@
 #parentDiv{
     background-color: #19bd9b;
     width: 60%;
-    height: 50vh;
+    /* height: auto; */
+    height: 42vh;
+    max-height: 80vh;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
+    margin-top: 20px;
+    margin-left: 40px;
     position: relative;
-    top: 40px;
-    left: 40px;
+    /* top: 40px; */
+    /* left: 40px; */
     color: #f4f3f8;
     display: flex;
     flex-direction: row;
 }
+
 #rightSection{
     position: absolute;
-    right: 0;
-    /* float: right; */
+    top: -10px;
+    right: 10px;
 }
+
 #hashStyle{
     height: 40px;
     color: black;
@@ -30,10 +36,6 @@
     border-radius: 10px;
     height: 30px;
 }
-#rightSectionLableField :focus:hover{
-    outline: #19bd9b;
-    border-color: #f4f3f8;
-}
 #rightSectionForm{
     display: flex;
     flex-direction: row;
@@ -46,15 +48,11 @@
     border: #19bd9b;
     height: 30px;
     position: relative;
-    /* top: 10px; */
     width: 150px;
     right: 10px;
     text-align: center;
     font-size: large;
     
-}
-#inputField :focus{
-    border-color: #19bd9b;
 }
 
 #header{
@@ -66,17 +64,20 @@
     bottom:  15px;
 }
 #leftSectionBillingSide{
-    position: absolute;
-    bottom: 50px;
-    bottom: 10px;
+    position: relative;
+    top: 50px;
+    display: flex;
+    flex-direction: column;
     left: 20px;
+    width: 100%;
     text-align: left;
     
 }
 #leftSectionBillingSideInputfield{
     border: #19bd9b;
     border-radius: 10px;
-    height: 30px;
-    width: 250px;
-    margin-bottom: 3px;
+    height: 50px;
+    width: 110%;
+    margin-bottom: 5px;
+    resize: none;
 }
