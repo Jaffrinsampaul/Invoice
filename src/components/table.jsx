@@ -1,15 +1,14 @@
 import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
+
 import "../styles/css/table.css"
 import {styles} from"../styles/btnstyle/btnStyle.js"
+import { colors } from "../styles/colors";
 
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
-import currencyToSymbolMap from 'currency-symbol-map/map'
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
-import { set } from "date-fns/esm";
-import { colors } from "../styles/colors";
 import { Divider } from "@mui/material";
 
 
@@ -17,27 +16,37 @@ const BiilingTable =(props)=>{
 
     const [orderDetails, setOrderDetails] =useState([
         {
-          id:1,  item:"one",quantity: 1, rate:100, amount: 0 
+          id:1,  item:"one",quantity: 1, rate:0, amount: 0 
         }
     ])
 
     const [total, setTotal] =useState({
-        subTotal: 0,total:0, discount: 0, tax: 0,shipping: 0, amountPaid: 0, balanceDue: 0 
+        subTotal: 0, total:0, discount: 0, tax: 0, shipping: 0, amountPaid: 0, balanceDue: 0 
     })
 
     useEffect(()=>{
-        const tempArr = orderDetails.map((obj)=>{
-            if(obj.amount === 0){
-                const calculation = obj.quantity * obj.rate
-                obj.amount = calculation     
-                setTotal({...total, subTotal: total.subTotal+ calculation})
-            }
-            return obj
-        })
-        setOrderDetails(tempArr)
-    }, [orderDetails!==1])
-    
+
+        const subCalculation = orderDetails.reduce((initalValue, obj)=>
+            initalValue + obj.rate * obj.quantity,0).toFixed(2)
+        setTotal({...total, subTotal: subCalculation})
+
+        if (total.tax!==0 && total.discount!==0){
+
+            const totalCalucation = total.tax+ total.shipping
+            setTotal({...total, total: totalCalucation})
+        }
+        else if(total.tax !== 0){
+            const totalCalucation = total.tax+ total.shipping
+            setTotal({...total, total: totalCalucation})
+        }
+        else if(total.discount!==0 ){
+            const totalCalucation = total.discount+ total.shipping
+            setTotal({...total, total: totalCalucation})
+        }
+
+    }, [orderDetails, total])
     const tableContent = props.content
+    const billingDetails = props.userDetails
 
     const handleCreateElm =()=>{
         setOrderDetails([...orderDetails,
@@ -47,17 +56,16 @@ const BiilingTable =(props)=>{
 
     const handleChange=(e, index=0, whichState="")=>{
         const keys = e.target.name
-        const value = parseInt(e.target.value)
-
+        let value 
         switch (whichState) {
             case "order":
+                value = e.target.value
                 const tempArr = orderDetails.map((obj)=>{
                     if(obj.id === index){
                         obj[keys]= value
                         if(keys === "quantity" || keys === "rate"){
                             const calculation =  obj.quantity * obj.rate
                             obj.amount = calculation
-                            setTotal({...total, subTotal:total.subTotal + calculation})
                         }
                     }   
                     return obj
@@ -65,12 +73,17 @@ const BiilingTable =(props)=>{
                 setOrderDetails(tempArr)
                 break;
             case "calculation":
+                value = parseInt(e.target.value)
+                setTotal({...total, [keys]: value})
+                break
+            case "amountPaid":
+                setTotal({...total, [keys]: value})
                 break
             default:
+                let balance = total.total - value
+                setTotal({...total, balanceDue: balance})
                 break;
         }
-
-        
     }
 
     const handlelabelChange =(e)=>{
@@ -114,20 +127,26 @@ const BiilingTable =(props)=>{
 
     }
 
+    const handleUserDetails =(ent)=>{
+        const keys = ent.target.name
+        const value = ent.target.value
+        props.useData(keys, value)
+    }
+
     const handleCancelRow=(e, index)=>{
         orderDetails.splice(index, 1)
         setOrderDetails([...orderDetails])
     }
     return(
-        <section style={{minHeight: "40vh", maxHeight:"auto"}}>
+        <section style={{width: "100%"}}>
             <table>
                 <thead id="tableHeader">
                     <tr >
-
-                        <th style={{backgroundColor: "#242424"}}>
+                        <th style={{backgroundColor: "#242424", width: "50%"}}>
                             <input type="text" 
                                 value={tableContent.tableheadItem} 
                                 id="itemheaderinput"
+                                name="tableheadItem"
                                 onChange={handlelabelChange}
                             />
                         </th>
@@ -135,13 +154,15 @@ const BiilingTable =(props)=>{
                         <th style={{backgroundColor: "#242424"}}>
                             <input type="text"
                                 id="thOtherLabels"
+                                name="tableheadQuantity"
                                 value={tableContent.tableheadQuantity}
                                 onChange={handlelabelChange}
                             />
                         </th>
 
                         <th style={{backgroundColor: "#242424"}}>
-                            <input type="text" 
+                            <input type="text"
+                                name="tableheadRate" 
                                 value={tableContent.tableheadRate}
                                 onChange={handlelabelChange}
                                 id="thOtherLabels"
@@ -149,7 +170,8 @@ const BiilingTable =(props)=>{
                         </th>
 
                         <th style={{backgroundColor: "#242424"}} colSpan={2}>
-                            <input type="text" 
+                            <input type="text"
+                                name="tableheadAmount"
                                 value={tableContent.tableheadAmount}
                                 onChange={handlelabelChange}
                                 id="thOtherLabels"
@@ -162,16 +184,17 @@ const BiilingTable =(props)=>{
                         orderDetails.map((obj, index)=>{
                             return(
                                 <tr key={index}>
-                                    <td>
+                                    <td style={{width: "50%", margin:0}}>
                                         <input type="text"
-                                            id="tbodyinputfields" style = {index%2===0?{backgroundColor:colors.blue}:{backgroundColor:colors.white}}
+                                            id="tbodyinputfields" 
+                                            style = {index%2===0?{backgroundColor:colors.lightBlue}:{backgroundColor:colors.white}}
                                             name="item" value={obj.item} 
                                             onChange={(e)=>{handleChange(e,obj.id, "order")}}
                                         />
                                     </td>
 
                                     <td>
-                                        <input type="text" style = {index%2===0?{backgroundColor:colors.blue}:{backgroundColor:colors.white}}
+                                        <input type="text" style = {index%2===0?{backgroundColor:colors.lightBlue}:{backgroundColor:colors.white}}
                                             name="quantity" value={obj.quantity} 
                                             onChange={(e)=>{handleChange(e,obj.id, "order")}}
                                             id="tbodyinputfields"
@@ -179,23 +202,27 @@ const BiilingTable =(props)=>{
                                     </td>
 
                                     <td>
-                                        <input type="text" style = {index%2===0?{backgroundColor:colors.blue}:{backgroundColor:colors.white}}
+                                        <input type="text" style ={index%2===0?{backgroundColor:colors.lightBlue}:{backgroundColor:colors.white}}
                                             name="rate" value={obj.rate} 
                                             onChange={(e)=>{handleChange(e,obj.id, "order")}}
                                             id="tbodyinputfields"
                                         />
-
+                                        
                                     </td>
 
                                     <td>
                                         <section style={{display: "flex"}}>
+                                            <input type="text"
+                                                name="rate"  value={billingDetails.currencySymbol}
+                                                id="currencySymbolFields"
+                                            />
 
-                                        <input type="text" style = {index%2===0?{backgroundColor:colors.blue}:{backgroundColor:colors.white}}
-                                            name="rate" value={obj.amount} 
-                                            onChange={(e)=>{handleChange(e,obj.id, "order")}}
-                                            id="tbodyinputfields"
-                                        />
-                                        <CancelRoundedIcon style={styles.canceltableBtn} onClick={(e)=>{handleCancelRow(e, index)}}/>
+                                            <input type="text"
+                                                name="rate" value={obj.amount} 
+                                                onChange={(e)=>{handleChange(e,obj.id, "order")}}
+                                                id="tbodyinputfields"
+                                            />
+                                            <CancelRoundedIcon style={styles.canceltableBtn} onClick={(e)=>{handleCancelRow(e, index)}}/>
                                         </section>
                                     </td>
 
@@ -211,85 +238,94 @@ const BiilingTable =(props)=>{
                 </tfoot>
             </table>
             <Divider style={styles.divider}/>
+            <section style={{display: "flex", width:"100%"}}>
+
+                <section id="termCondition">
+
+                    <input type="text" value={tableContent.notes} 
+                        name="notes" id="noteLabel" onChange={handlelabelChange}
+                    />
+                    <textarea type="text" value={tableContent.notesPara}
+                         id ="noteInput" name="notes" onChange={handleUserDetails}
+                    />
             
-            <section id="calculationPart">
-                <section>
-                    <input type="text" name="subTotal" value={tableContent.subTotal} 
-                        id="subTotal"  onChange={handlelabelChange}
-                    />:
-                    <input type="text" name="" value={total.subTotal} 
-                        id="subTotalinput" onChange={(e)=>{handleChange(e,0, "calculation")}}
+                    <input type="text" value={tableContent.terms} 
+                       name="terms" id="noteLabel" onChange={handlelabelChange}
                     />
-                </section>
-
-                <section>
-                    <input type="text" name="discount" value={tableContent.discount} 
-                        id="discount" onChange={handlelabelChange}
-                    />:
-                    <input type="text" name="discount" value={total.discount} 
-                        id="subTotalinput"  onChange={(e)=>{handleChange(e,0, "calculation")}}
+                    <textarea type="text" value={tableContent.notesPara} 
+                        name="noteLabel" id ="noteInput" onChange={handleUserDetails}
                     />
-                </section>
 
-                <section>
-                    <input type="text" name="tax" value={tableContent.tax} 
-                        id="tax"  onChange={handlelabelChange}
-                    />:
-                    <input type="text" name="tax" value={total.tax} 
-                        id="subTotalinput"  onChange={(e)=>{handleChange(e,0, "calculation")}}
-                    />
                 </section>
-
-                <section>
-                    <input type="text" name="shiping" value={tableContent.shiping} 
-                        id="subTotal" onChange={handlelabelChange}
-                    />:
-                    <input type="text" name="shipping" value={total.shipping} 
-                        id="subTotalinput"  onChange={(e)=>{handleChange(e,0, "calculation")}}
-                    />
-                </section>
-
-                <section>
-                    <input type="text" name="total" value={tableContent.total} 
-                        id="total" onChange={handlelabelChange}
-                    />:
-                    <input type="text" name="total" value={total.total} 
-                        id="subTotalinput"  onChange={(e)=>{handleChange(e,0, "calculation")}}
-                    />
-                </section>
-
-                <section style={{
-                    position: "relative",
-                    top: "20px"
-                }}>
+                <section id="calculationPart">
                     <section>
-                        <input type="text" name="amountPaid" value={tableContent.amountPaid} 
-                            id="amountPaid" onChange={handlelabelChange}
+                        <input type="text" name="subTotal" value={tableContent.subTotal} 
+                            id="subTotal"  onChange={handlelabelChange}
                         />:
-                        <input type="text" name="amountPaid" value={total.amountPaid} 
+                        <input type="text" name="" value={total.subTotal} 
+                            id="subTotalinput" onChange={(e)=>{handleChange(e,0, "calculation")}}
+                        />
+                    </section>
+
+                    <section>
+                        <input type="text" name="discount" value={tableContent.discount} 
+                            id="discount" onChange={handlelabelChange}
+                        />:
+                        <input type="text" name="discount" value={total.discount} 
                             id="subTotalinput"  onChange={(e)=>{handleChange(e,0, "calculation")}}
                         />
                     </section>
-                    <br />
+
                     <section>
-                        <input type="text" name="balanceDue" value={tableContent.balanceDue} 
-                            id="balanceDue" 
+                        <input type="text" name="tax" value={tableContent.tax} 
+                            id="tax"  onChange={handlelabelChange}
                         />:
-                        <input type="text" name="balanceDue" value={total.balanceDue} 
+                        <input type="text" name="tax" value={total.tax} 
                             id="subTotalinput"  onChange={(e)=>{handleChange(e,0, "calculation")}}
                         />
                     </section>
+
+                    <section>
+                        <input type="text" name="shiping" value={tableContent.shiping} 
+                            id="subTotal" onChange={handlelabelChange}
+                        />:
+                        <input type="text" name="shipping" value={total.shipping} 
+                            id="subTotalinput"  onChange={(e)=>{handleChange(e,0, "calculation")}}
+                        />
+                    </section>
+
+                    <section>
+                        <input type="text" name="total" value={tableContent.total} 
+                            id="total" onChange={handlelabelChange}
+                        />:
+                        <input type="text" name="total" value={total.total} 
+                            id="subTotalinput"  onChange={(e)=>{handleChange(e,0, "calculation")}}
+                        />
+                    </section>
+
+                    <section style={{
+                        
+                        marginTop: "20px"
+                    }}>
+                        <section>
+                            <input type="text" name="amountPaid" value={tableContent.amountPaid} 
+                                id="amountPaid" onChange={handlelabelChange}
+                            />:
+                            <input type="text" name="amountPaid" value={total.amountPaid} 
+                                id="subTotalinput"  onChange={(e)=>{handleChange(e,0, "amountPaid")}}
+                            />
+                        </section>
+                        
+                        <section>
+                            <input type="text" name="balanceDue" value={tableContent.balanceDue} 
+                                id="balanceDue" onChange={handlelabelChange}
+                            />:
+                            <input type="text" name="balanceDue" value={total.balanceDue} 
+                                id="subTotalinput"  onChange={(e)=>{handleChange(e,0, "calculation")}}
+                            />
+                        </section>
+                    </section>
                 </section>
-            </section>
-            <section id="termCondition">
-
-                <input type="text" value={tableContent.notes} id="noteLabel"/>
-                <textarea type="text" placeholder={tableContent.notesPara} id ="noteInput"/>
-        
-                <input type="text" value={tableContent.terms} id="noteLabel"/>
-                <textarea type="text" placeholder={tableContent.notesPara} id ="noteInput" />
-
-
             </section>
         </section>
     )

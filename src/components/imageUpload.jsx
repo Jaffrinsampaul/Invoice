@@ -7,13 +7,15 @@ import AddIcon from '@mui/icons-material/Add';
 import Button from '@mui/material/Button';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 
-const ImageUpload =()=>{
+const ImageUpload =(props)=>{
 
     const [image, setImage]= useState(
         {profilePic: null, ImageUploaded: false}
     )
-
+    
+    
     const handleUploadImage =(ent)=>{
+        const keys = ent.target.name
         let file = ent.target.files[0]
         let reader = new FileReader()
         let url = reader.readAsDataURL(file)
@@ -21,8 +23,7 @@ const ImageUpload =()=>{
         reader.onloadend = function(e){
             setImage({...image, profilePic: [reader.result], ImageUploaded: true})
         }
-
-        // setImage({...image, mainState: "uploaded", profilePic: file, ImageUploaded: 1})
+        props.userData(keys, image)
     }
 
     const handleCancel =()=>{
@@ -39,7 +40,9 @@ const ImageUpload =()=>{
                     </section>:
                         <Button variant="text" style={styles.addProfile}>
                             <AddIcon/>Add Logo
-                            <input id="addProfilebtn" style={{opacity: 0}} type="file" accept="image/*" Button={"None"} onChange={handleUploadImage}/>
+                            <input id="addProfilebtn" style={{opacity: 0}} name= "logo" type="file" 
+                                accept="image/*" Button={"None"} onChange={handleUploadImage}
+                            />
                         </Button>
             }
             {/* <img src={image.profilePic} alt="" /> */}

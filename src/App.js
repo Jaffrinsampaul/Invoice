@@ -1,11 +1,10 @@
-import logo from './logo.svg';
 import './App.css';
-import LandingPage from './components/landingPage';
+import Routing from './components/routing';
 
 function App() {
   return (
     <div className="App">
-      <LandingPage/>
+      <Routing/>
     </div>
   );
 }

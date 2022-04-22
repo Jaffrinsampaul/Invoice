@@ -1,29 +1,32 @@
 #parent{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     background-color: #f4f3f8;
-    height: 150vh;
-    max-height: 180vh;
+    height: auto;
+    width: 100%;
+}
+#leftsideDiv{
+    width: 70%;
 }
 #rightSideDiv{
-    position: relative;
-    right: 0;
-    top: 100px;
+    width: 30%;
+    /* height: /; */
+    display: flex;
+    flex-direction: column;
+    margin-top: 10%;
+    margin-left: 20px;
     
 }
 #currency{
     display: flex;
-    flex-direction: row;
-    position: absolute;
-    right: 16%;
-    top: 80px;
+    flex-direction: row ;
+    margin-bottom: 20px;
 }
 #currency input{
     border: 0;
     position: relative;
     width: "10px"; 
     margin-right: 0;
-    top: 25px;
     text-align: right;
     height: 40px;
     font-weight: bold;

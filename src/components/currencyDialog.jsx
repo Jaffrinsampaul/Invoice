@@ -1,24 +1,18 @@
 import * as React from 'react';
-import { useTheme } from '@mui/material/styles';
+import { useState } from 'react';
 
 import "../styles/css/currencyDialog.css" 
-import OutlinedInput from '@mui/material/OutlinedInput';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import { colors } from '../styles/colors';
-import Button from '@mui/material/Button';
+import search from "../asset/search.svg"
+import { styles } from '../styles/btnstyle/btnStyle';
+
+import MenuItem from '@mui/material/MenuItem';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Slide from '@mui/material/Slide';
 import CloseIcon from '@mui/icons-material/Close';
-import { styles } from '../styles/btnstyle/btnStyle';
-import search from "../asset/search.svg"
-import { useState } from 'react';
 
 
 
@@ -27,8 +21,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 
-export default function CurrencyDialogBox() {
-  const [selectedCurrency, setSelectedCurrency]=useState({})
+export default function CurrencyDialogBox(props) {
+  const [selectedCurrency, setSelectedCurrency]=useState({name: "Select Currency" , sym: ""})
 
   const [open, setOpen] = React.useState(false);
 
@@ -68,8 +62,12 @@ export default function CurrencyDialogBox() {
     },
 ];
 
-  const handleChange =(e, countryName, symbol)=>{
+  const handleChange = async(e, string,  countryName, symbol)=>{
+    const keys = string
+    console.log(keys)
     setSelectedCurrency({name: countryName, sym: symbol})
+    console.log("dialogBox",countryName, symbol)
+    await props.userData(keys, symbol)
     setOpen(false)
   }
 
@@ -77,13 +75,16 @@ export default function CurrencyDialogBox() {
     <div 
       style={{display:"flex", 
           color: colors.lightGreen, 
-          marginTop: "20px",
+          marginTop: "10px",
            marginLeft: "10px"
           }}>
 
       <p onClick={handleClickOpen} 
-          style={{margin: 0, marginTop: "14px"}}>
-        {selectedCurrency.name}
+          style={{margin: 0, marginTop: "0px"}}>
+            {
+              selectedCurrency.name === "Select Currency"? selectedCurrency.name : `${selectedCurrency.name} (${selectedCurrency.sym})` 
+            }
+        
       </p>
       
       <select id="selectMenu" value={selectedCurrency.name} onClick={handleClickOpen}></select>
@@ -108,8 +109,9 @@ export default function CurrencyDialogBox() {
                     <MenuItem style={{
                       display: "flex",flexDirection: "row",
                       width: "400px",
-                      value: obj.contryName
-                    }} id ={index} onClick={(e)=>{handleChange(e, obj.contryName, obj.symbol)}}>
+                      value: obj.contryName,
+                      name: "currencySymbol"
+                    }} id ={index} onClick={(e)=>{handleChange(e, "currencySymbol",  obj.contryName, obj.symbol)}}>
                       <section>
                         {obj.contryName}
                       </section>

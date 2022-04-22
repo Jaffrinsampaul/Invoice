@@ -5,11 +5,10 @@ export const styles ={
         position: "absolute",
         left: 0,
         marginTop: "20px"
-        // bottom: 0,
     },
     calender: {
         position: "absolute",
-        top: "10px",
+        top: "0px",
         right: "13px",
     },
     addProfile:{
@@ -37,10 +36,9 @@ export const styles ={
         borderColor: colors.lightGreen,
         position: "relative",
         float: "right",
-        top: "200px",
-        right: "14%",
         width: "200px",
         height: "40px",
+        top: "10px",
         color: colors.white,
         borderRadius: "20px",
         fontSize :"12px",
@@ -55,9 +53,7 @@ export const styles ={
     },
     saveInvoice: {
         position: "relative",
-        float: "right",
-        top: "280px",
-        marginRight: "10px",
+        top: "40px",
         color: colors.black,
         height: "40px",
         width: "200px",
@@ -71,10 +67,8 @@ export const styles ={
     },
     invoice:{
         position: "relative",
+        top: "70px",
         float: "right",
-        top: "360px",
-        left: "210px",
-        marginRight: "10px",
         color: colors.black,
         height: "40px",
         width: "200px",

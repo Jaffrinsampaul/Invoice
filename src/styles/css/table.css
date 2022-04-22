@@ -13,6 +13,7 @@ table{
     background-color: #242424;
     border: 0;
     color: white;
+    width: 95%
 }
 #thOtherLabels{
     background-color: #242424;
@@ -21,35 +22,51 @@ table{
     color: white;
 }
 #tbodyinputfields{
-    background-color: #f0f8ff;
+    /* background-color: #f0f8ff; */
     height: 30px;
     margin-top: 10px;
     border: 0;
-    width: 50%;
+    width: 95%;
     border-radius: 10px;
     font-weight: bold;
 }
-#tbodyinputfields:first-child{
-    width: 90%;
+#currencySymbolFields{
+    height: 30px;
+    margin-top: 10px;
+    border: 0;
+    width: 5%;
+    
+    font-weight: bold;
+}
+#currencyNumberFields{
+    height: 30px;
+    margin-top: 10px;
+    border: 0;
+    width: 85%;
+    border-radius: 10px;
+    font-weight: bold;
 }
 
 #calculationPart{
-    position: relative;
-    float: right;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
     height: auto;
-    top: 150px;
+    margin-top: 110px;
 }
 #subTotal{
-    position: relative;
     border: 0;
     text-align: right;
     margin-right: 20px;
+    background-color: transparent;
     width: 150px;
     font-size: medium;
 }
+
 #discount,#tax{
     position: relative;
     color: blue;
+    background-color: transparent;
     border: 0;
     text-align: right;
     margin-right: 20px;
@@ -75,7 +92,6 @@ table{
     font-weight: 540;
 }
 #amountPaid, #balanceDue{
-    position: relative;
     border: 0;
     text-align: right;
     margin-right: 20px;
@@ -84,7 +100,7 @@ table{
     font-weight: bold;
 }
 #termCondition{
-    position: relative;
+    margin-top: 110px;
     float: left;
     top: 140px;
     width: 60%;
@@ -97,7 +113,7 @@ table{
     border: 0;
     position: relative;
     left: 20px;
-    height: 50px;
+    height: 40px;
     font-size: larger;
     bottom: 10px;
     width:100px;
@@ -106,14 +122,13 @@ table{
     resize: none;
     border: 0;
     position: relative;
-    left: 45px;
+    left: 25px;
     font-family: 'Gill Sans';
     font-size: larger;
     width: 100%;
-    font-size: x-large;
-    height: 90px;
+    height: 60px;
     margin-bottom: 40px;
     border-radius: 10px;
-    background-color: aliceblue;
+    background-color: #f4f3f8;
     padding: 10px;
 }

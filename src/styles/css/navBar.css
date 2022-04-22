@@ -1,25 +1,24 @@
 #parentDiv{
     background-color: #19bd9b;
-    width: 60%;
-    /* height: auto; */
-    height: 42vh;
+    width: 90%;
+    height: auto;
     max-height: 80vh;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     margin-top: 20px;
     margin-left: 40px;
     position: relative;
-    /* top: 40px; */
-    /* left: 40px; */
     color: #f4f3f8;
     display: flex;
     flex-direction: row;
 }
 
 #rightSection{
-    position: absolute;
-    top: -10px;
-    right: 10px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    justify-content: space-evenly;
 }
 
 #hashStyle{
@@ -29,18 +28,22 @@
 }
 #rightSectionLableField{
     border: 0;
-    background-color: #19bd9b;
+    background-color: transparent;
     margin-right: 20px;
     color: #f4f3f8;
     text-align: right;
     border-radius: 10px;
     height: 30px;
+    position: relative;
+    bottom: 10px;
+    width: 50%;
 }
+
 #rightSectionForm{
     display: flex;
     flex-direction: row;
     position: relative;
-    top: 40px;
+    top: 10px;
 }
 #inputField{
     margin-left: 20px;
@@ -48,11 +51,38 @@
     border: #19bd9b;
     height: 30px;
     position: relative;
-    width: 150px;
+    bottom: 10px;
+    width: 50%;
+    right: 10px;
+    text-align: center;
+    font-size: large;  
+}
+#invoiceField{
+    margin-left: 20px;
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+
+    border: #19bd9b;
+    height: 30px;
+    position: relative;
+    bottom: 10px;
+    width: 80%;
     right: 10px;
     text-align: center;
     font-size: large;
-    
+}
+
+#placeholderHashTag{
+    width: 20%;
+    background-color: #f4f3f8;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    position: relative;
+    font-weight: bold;
+    font-size: medium;
+    top: -10px;
+    left: 10px;
+    border: 0;
 }
 
 #header{
@@ -63,11 +93,18 @@
     position: relative;
     bottom:  15px;
 }
+
+#leftSection{
+    width: 60%;
+    height: auto;
+}
 #leftSectionBillingSide{
-    position: relative;
-    top: 50px;
     display: flex;
     flex-direction: column;
+    justify-content: space-evenly;
+    margin-left: 20px;
+    margin-top: 200px;
+    margin-bottom: 20px;
     left: 20px;
     width: 100%;
     text-align: left;
@@ -77,7 +114,7 @@
     border: #19bd9b;
     border-radius: 10px;
     height: 50px;
-    width: 110%;
+    width: 90%;
     margin-bottom: 5px;
     resize: none;
 }
