@@ -26,14 +26,14 @@ const Billing =(props)=>{
                 <section id="shipingDetialsBillTo">
                     
                     <input type="text" name="billTo" value={labelContent.billTo} 
-                       style={{width: "95%", borderRadius: "10px" ,height:"20px"}} onChange={handlelabelChange}
+                       style={{width: "95%", borderRadius: "10px" ,height:"20px", fontWeight: "bold"}} onChange={handlelabelChange}
                     />
                     <input type="text" id="shipingDetialsBilTxtfield" name="billTo" onChange={handleUserDetails}/>
                 </section>
                 
                 <section id="shipingDetialsshipTo">
                     <input type="text" name="shipTo" value={labelContent.shipTo} 
-                        style={{width: "95%", borderRadius: "10px" ,height:"20px"}} onChange={handlelabelChange}
+                        style={{width: "95%", borderRadius: "10px" ,height:"20px", fontWeight: "bold"}} onChange={handlelabelChange}
                     />
                     <input type="text" id="shipingDetialsBilTxtfield2" name="shipTo" onChange={handleUserDetails}/>
                 </section>

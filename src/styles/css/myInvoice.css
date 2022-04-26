@@ -10,9 +10,11 @@
 #card{
     background-color: white;
     width: 45%;
-    height: 50vh;
+    height: auto;
     text-align: left;
     border-radius: 20px;
+    display: flex;
+    flex-direction: column;
 }
 #headerInvoice{
     margin-left: 20px;
@@ -33,4 +35,23 @@
     border-radius: 20px;
     background-color: #f4f3f8;
     height: 30px;
+}
+
+#invoiceCard{
+    width: 20%;
+    height: auto;
+    background-color:  #f1faf9;
+    border-style: solid;
+    border-radius: 10px;
+    border-color: #19bd9b;
+    text-align: center
+}
+#invoiceCardContent{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    font-size: 23px; 
+    margin-top: 10%;
+    font-weight: bold;
+    margin-left: 10%;
 }

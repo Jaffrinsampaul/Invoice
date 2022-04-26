@@ -1,3 +1,4 @@
+import { color } from "@mui/system";
 import { colors } from "../colors";
 
 export const styles ={
@@ -24,7 +25,9 @@ export const styles ={
         position: "absolute",
     },
     canceltableBtn: {
-        marginTop: "10px"
+        marginTop: "15px",
+        marginLeft: "5px",
+        color: colors.lightBlack
     },
     currencyBtn:{
         position: "absolute",
@@ -87,4 +90,30 @@ export const styles ={
         top: "5px",
         left: "10px"
     },
+    deleteIcon: {
+        width: "15%",
+        float: "right",
+        position: "relative",
+        top: "10px",
+        right: "10px"
+    },
+    export:{
+       backgroundColor: colors.lightGreen,
+       borderRadius: "30px",
+       marginTop: "60px",
+       float: "right",
+       marginRight: "20px",
+    },
+    newInvoice:{
+        border: "solid 2px",
+        borderColor: colors.lightGreen,
+        borderRadius: "30px",
+        height: "50px",
+        width: "150px",
+        marginTop: "60px",
+        marginRight: "20px",
+        float: "right",
+        color: colors.lightGreen,
+        fontSize: "12px",
+    }
 }
