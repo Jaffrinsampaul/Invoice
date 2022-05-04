@@ -14,5 +14,8 @@ export const IconsStyles ={
         width: "15px",
         color: colors.white,
         marginRight: "10px"
+    },
+    addIcons: {
+        width: "15px"
     }
 }

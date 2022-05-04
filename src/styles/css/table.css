@@ -2,9 +2,10 @@
 table{
     position: relative;
     top: 50px;
-    width: 100%;
+    width: 95%;
     height: auto;
-    padding: 10px;
+    margin-left: 18px;
+    /* padding: 20px; */
     /* border-collapse: collapse; */
 }
 #tableHeader{
@@ -13,15 +14,23 @@ table{
 }
 #itemheaderinput{
     background-color: #242424;
+    border-radius: 10px;
     border: 0;
     color: white;
-    width: 95%
+    width: 95%;
+    height: 40px;
+    padding-left: 10px;
+    font-family: "trenda";
+    font-size: medium;
 }
 #thOtherLabels{
     background-color: #242424;
     border: 0;
     width: 95%;
     color: white;
+    height: 40px;
+    font-family: "trenda";
+    font-size: medium;
 }
 #amountHeader{
     background-color: #242424;
@@ -29,33 +38,40 @@ table{
     width: 95%;
     text-align: center;
     color: white;
+    height: 40px;
+    font-family: "trenda";
+    font-size: medium;
 }
 #currencyAmnount{
-    height: 40px;
-    margin-top: 10px;
+    /* height: 40px; */
+    margin-top: 30px;
+    margin-right: 10px;
     border: 0;
-    width: 10%;
+    width: 15%;
     
     font-weight: bold;
 }
 #tbodyinputfields{
-    /* background-color: #f0f8ff; */
     height: 40px;
     margin-top: 10px;
     border: 0;
     width: 95%;
     border-radius: 10px;
-    font-family: 'Roboto', sans-serif;
+    font-family: "trenda";
+    font-size: medium;
     font-weight: bold;
+    text-indent:15px;
 }
 #amountLabel{
     height: 40px;
-    margin-top: 10px;
+    margin-top: 20px;
     margin-right: 10px;
+    margin-bottom: 10px;
     border: 0;
     width: 50%;
     border-radius: 10px;
     font-weight: bold;
+    text-indent:15px;   
 }
 #currencySymbolFields{
     height: 30px;
@@ -75,66 +91,92 @@ table{
 }
 
 #calculationPart{
-    width: 50%;
+    width: 40%;
     display: flex;
     flex-direction: column;
     height: auto;
-    margin-top: 110px;
+    margin-top: 50px;
+    float: right;
+}
+#calculationLine{
+    display: flex;
+    margin-bottom:15px;
+    width: 100%;
 }
 #subTotal{
     border: 0;
     text-align: right;
     margin-right: 20px;
     background-color: transparent;
-    width: 150px;
+    width: 50%;
+    font-family: "trenda";
     font-size: medium;
 }
 
+#subTotalinput{
+    border: 0;
+    text-align: right;
+    width: 30%;
+    background-color: transparent;
+    font-family: "trenda";
+    font-size: medium;
+    font-weight: 540;
+}
 #discount,#tax{
     position: relative;
-    color: blue;
+    color: #0000ff;
     background-color: transparent;
     border: 0;
     text-align: right;
     margin-right: 20px;
-    width: 150px;
+    width:46%;
+    font-family: "trenda";
     font-size: medium;
 }
-#total{
-    position: relative;
-    border: 0;
+#disableCalculation {
+    border: solid 1px;
+    border-color: #99daeb;
     text-align: right;
-    margin-right: 20px;
-    width: 150px;
-    font-size: 25px;
-    font-weight: bold;
-}
-#subTotalinput{
-    border: 0;
-    text-align: right;
-    width: 60px;
-    margin-right: 20px;
-    margin-bottom: 15px;
+    width: 48%;
+    margin-left:10px;
+    border-radius: 5px;
+    background-color: transparent;
+    font-family: "trenda";
     font-size: large;
     font-weight: 540;
+}
+#disableCalculation:focus{
+    border: solid 2px #99daeb;
+    border-color: #99daeb;
+}
+#total{
+    border: 0;
+    text-align: right;
+    margin-right: 20px;
+    width: 50%;
+    font-size: 18px;
+    font-weight: bold;
+    font-family: "trenda";
+    /* font-size: medium; */
 }
 #amountPaid, #balanceDue{
     border: 0;
     text-align: right;
     margin-right: 20px;
-    width: 150px;
+    width: 50%;
     font-size: 15px;
-    font-weight: bold;
+    font-family: "trenda";
+    /* font-size: medium; */
 }
 #termCondition{
-    margin-top: 110px;
+    margin-top: 20px;
     float: left;
-    top: 140px;
     width: 60%;
     height: auto;
     bottom: 40px;
     display: flex;
     flex-direction: column;
+    
     /* font-family: 'Roboto', sans-serif; */
     @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
 }
@@ -146,16 +188,18 @@ table{
     font-size: larger;
     bottom: 10px;
     width:100px;
+    font-family: "trenda";
 }
 #noteInput{
     resize: none;
     border: 0;
     position: relative;
     left: 25px;
-    font-family: 'Roboto', sans-serif;
-    font-size: medium;
-    font-weight: bold;
-    width: 100%;
+    font-family: "trenda";
+    font-size: large;
+    overflow: hidden;
+    font-weight: 400;
+    width: 76%;
     height: 40px;
     margin-bottom: 40px;
     border-radius: 10px;

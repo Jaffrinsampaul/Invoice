@@ -18,6 +18,8 @@
     width: 45%;
     flex-direction: column;
     left: 20px;
+    font-family: trenda;
+    font-size: medium
 }
 #shipingDetialsBillTo input{
     border: 0;

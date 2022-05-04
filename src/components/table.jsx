@@ -2,6 +2,12 @@ import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
+import { saveInvoiceData } from "./redux/reduxHandling";
+import { handleTableData } from "./redux/reduxHandling";
+
 import "../styles/css/table.css";
 import { styles } from "../styles/btnstyle/btnStyle.js";
 import { colors } from "../styles/colors";
@@ -10,8 +16,10 @@ import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import { Divider } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
+import { IconsStyles } from "../styles/btnstyle/icons";
 
 const BiilingTable = (props) => {
+
   const [orderDetails, setOrderDetails] = useState([
     {
       id: 1,
@@ -19,6 +27,7 @@ const BiilingTable = (props) => {
       quantity: 1,
       rate: 0,
       amount: 0,
+      symbols: " "
     },
   ]);
 
@@ -33,19 +42,37 @@ const BiilingTable = (props) => {
   });
 
   const [demo, setDemo]=useState({shiping: 0, amountPaid: 0})
-
+  const [fieldsDisable, setFieldsDisable]=useState({discountBtn: false, taxBtn: false, shippingBtn: false})
+  
+  let location = useLocation()
+  const isEdit = location.state.isEdit
+  let editData = useSelector(state => state.editData.tableData)
+  console.log(editData)
+  
   useEffect(() => {
+    
+    if(editData.length!= 0){
+
+      setOrderDetails(editData)
+    }
+
     const subCalculation = orderDetails
-      .reduce((initalValue, obj) => initalValue + obj.rate * obj.quantity, 0)
-      .toFixed(2);
+      .reduce((initalValue, obj) => initalValue + obj.rate * obj.quantity, 0);
 
-    setTotal({ ...total, subTotal: subCalculation, total: parseInt(subCalculation)});
+    setTotal({ ...total, subTotal: subCalculation, total: parseInt(subCalculation), balanceDue: parseInt(subCalculation)});
 
-  }, [orderDetails]);
+    dispatchData(saveInvoiceData("balanceDue", parseInt(subCalculation)))
+     
+  }, [orderDetails, isEdit === true]);
+  
+
+  const dispatchData = useDispatch()
+  let currencySelector = useSelector(state=> state.invoiceObj)
+
+
 
   const tableContent = props.content;
-  const billingDetails = props.userDetails;
-
+  
   //CreateNewField
   const handleCreateElm = () => {
     setOrderDetails([
@@ -69,43 +96,50 @@ const BiilingTable = (props) => {
         case "order":
             value = e.target.value;
             const tempArr = orderDetails.map((obj) => {
-            if (obj.id === index) {
+              if (obj.id === index) {
                 obj[keys] = value;
-
+                
                 if (keys === "quantity" || keys === "rate") {
-                const calculation = obj.quantity * obj.rate;
-                obj.amount = calculation;
+                  const calculation = obj.quantity * obj.rate;
+                  obj.amount = calculation;
                 }
-            }
-            return obj;
-            });
-            
-            setOrderDetails(tempArr);
+                dispatchData(handleTableData("tableDetails", obj))
+              }
+              console.log(obj)
+              
+              return obj;
+              });
+              setOrderDetails(tempArr);
             break;
             
         case "calculation":
 
-            value = parseInt(e.target.value);
+            value = Number(e.target.value);
+            
             setTotal({ ...total, [keys]: value, });
             break;
 
         case "shipping":
 
-            value = parseInt(e.target.value);
+            value = Number(e.target.value);
             let calculation =  total.total - demo.shiping
             calculation = calculation + value
             setDemo({...demo, shiping: value})
             
-            setTotal({ ...total, shipping: value,total: calculation})
+            setTotal({ ...total, shipping: value,total: calculation, balanceDue: calculation})
+            
+            dispatchData(saveInvoiceData(total.balanceDue, calculation ))
             break
             
         case "amountPaid":
 
-            value = parseInt(e.target.value);
+            value = Number(e.target.value);
             let calculations =  total.total - demo.amountPaid
             calculations = calculations - value
 
             setTotal({ ...total, amountPaid: value, balanceDue:  calculations});
+            
+            dispatchData(saveInvoiceData(total.balanceDue, calculations))
             break;
             
         default:
@@ -126,6 +160,7 @@ const BiilingTable = (props) => {
     let resultAmount;
 
     switch (keys) {
+
       case "discount":
         percentage = spitValueArr.replace(/[&\/\\#^+()$~%.'":*?<>{}!@]/g, "");
         replaceText = `Discount (${percentage}%)`;
@@ -135,8 +170,9 @@ const BiilingTable = (props) => {
         amount = (total.subTotal * percentage) / 100;
         resultAmount = total.subTotal - amount;
         
-        setTotal({ ...total, discount: resultAmount, total: parseInt(resultAmount)});
-        console.log(total);
+        setTotal({ ...total, discount: resultAmount, total: parseInt(resultAmount), balanceDue: parseInt(resultAmount)});
+        
+        dispatchData(saveInvoiceData(total.balanceDue, resultAmount ))
 
         break;
       case "tax":
@@ -155,20 +191,54 @@ const BiilingTable = (props) => {
             resultAmount = amount + parseInt(total.subTotal)
         }
 
-        setTotal({ ...total, [keys]: resultAmount, total: parseInt(resultAmount) });
+        dispatchData(saveInvoiceData(total.balanceDue, resultAmount ))
+        setTotal({ ...total, tax: resultAmount, total: parseInt(resultAmount), balanceDue: parseInt(resultAmount) });
+        
         break;
 
       default:
         props.methods(keys, value);
+        
         break;
     }
   };
 
-  const handleUserDetails = (ent) => {
-    const keys = ent.target.name;
-    const value = ent.target.value;
-    props.useData(keys, value);
-  };
+  const cancelDiscountTax=(e, cancelString)=>{
+    switch (cancelString){
+      case "discount":
+        setFieldsDisable({...fieldsDisable, discountBtn: false})
+        const discount = total.discount
+        let cals = total.total - discount 
+
+        if(total.tax!=0){
+          cal= total.tax + total.shipping
+        }
+        else{
+
+          cals = total.subTotal + total.shipping
+        }
+        setTotal({...total, discount: 0, balanceDue: cals, total: cals})
+
+        break
+
+      case "tax":
+
+        setFieldsDisable({...fieldsDisable, taxBtn: false})
+        const tax = total.tax
+        let cal = total.total - tax
+
+        if(total.discount!=0){
+          cal =total.discount + total.shipping
+        }
+        else{
+
+          cal = total.subTotal + total.shipping
+        }
+        setTotal({...total, tax: 0, balanceDue: cal, total: cal})
+
+        break
+    }
+  }
 
   const handleCancelRow = (e, index) => {
     orderDetails.splice(index, 1);
@@ -178,9 +248,10 @@ const BiilingTable = (props) => {
   return (
     <section style={{ width: "100%" }}>
       <table cellpadding="2px" cellspacing="0" border="0">
+        
         <thead id="tableHeader">
-          <tr > 
-            <th style={{ backgroundColor: "#242424", width: "50%" }}>
+          <tr style={{borderRadius: "60px"}}> 
+            <th style={{ backgroundColor: "#242424", width: "50%", height: "40px", borderTopLeftRadius: "10px", borderBottomLeftRadius: "10px"}}>
               <input
                 type="text"
                 value={tableContent.tableheadItem}
@@ -210,7 +281,7 @@ const BiilingTable = (props) => {
               />
             </th>
 
-            <th style={{ backgroundColor: "#242424", width: "20%" }} colSpan={1}>
+            <th style={{ backgroundColor: "#242424", width: "20%",  borderTopRightRadius: "10px", borderBottomRightRadius: "10px"}} colSpan={1}>
               <input
                 type="text"
                 name="tableheadAmount"
@@ -278,12 +349,9 @@ const BiilingTable = (props) => {
 
                 <td>
                   <section style={{ display: "flex", marginLeft: "10px"}}>
-                    <input
-                      type="text"
-                      name="rate"
-                      value={billingDetails.currencySymbol}
-                      id="currencyAmnount"
-                    />
+                    <p id="currencyAmnount">
+                      {currencySelector.symbols ===  undefined?"$":currencySelector.symbols}
+                    </p>
 
                     <input
                       type="text"
@@ -306,15 +374,17 @@ const BiilingTable = (props) => {
             );
           })}
         </tbody>
-        <tfoot>
-          <Button style={styles.addItem} onClick={handleCreateElm}>
-            <AddIcon />
-            Add Item
-          </Button>
-        </tfoot>
       </table>
+
       <Divider style={styles.divider} />
+
+      <Button variant="text" style={styles.addItem} onClick={handleCreateElm}>
+        <AddIcon style={IconsStyles.addIcons}/>
+        add Item
+      </Button>
+      
       <section style={{ display: "flex", width: "100%" }}>
+
         <section id="termCondition">
           <input
             type="text"
@@ -327,8 +397,8 @@ const BiilingTable = (props) => {
             type="text"
             value={tableContent.notesPara}
             id="noteInput"
-            name="notes"
-            onChange={handleUserDetails}
+            name="notesPara"
+            onChange={handlelabelChange}
           />
 
           <input
@@ -340,14 +410,15 @@ const BiilingTable = (props) => {
           />
           <textarea
             type="text"
-            value={tableContent.notesPara}
-            name="noteLabel"
+            value={tableContent.termsPara}
+            name="termsPara"
             id="noteInput"
-            onChange={handleUserDetails}
+            onChange={handlelabelChange}
           />
         </section>
+
         <section id="calculationPart">
-          <section>
+          <section id="calculationLine">
             <input
               type="text"
               name="subTotal"
@@ -356,58 +427,89 @@ const BiilingTable = (props) => {
               onChange={handlelabelChange}
             />
             :
-            <input
-              type="text"
-              name=""
-              value={total.subTotal}
-              id="subTotalinput"
-              onChange={(e) => {
-                handleChange(e, 0, "calculation");
-              }}
-            />
+            <section style={{display:"flex", width: "50%"}}>
+              <p style={{margin: 0, marginLeft: "10px"}}>{currencySelector.symbols===""? "":currencySelector.symbols}</p>
+              <input
+                type="text"
+                name=""
+                value={total.subTotal}
+                id="subTotalinput"
+                onChange={(e) => {
+                  handleChange(e, 0, "calculation");
+                }}
+              />
+            </section>
           </section>
 
-          <section>
-            <input
-              type="text"
-              name="discount"
-              value={tableContent.discount}
-              id="discount"
-              onChange={handlelabelChange}
-            />
-            :
-            <input
-              type="text"
-              name="discount"
-              value={total.discount}
-              id="subTotalinput"
-              onChange={(e) => {
-                handleChange(e, 0, "calculation");
-              }}
-            />
-          </section>
 
-          <section>
-            <input
-              type="text"
-              name="tax"
-              value={tableContent.tax}
-              id="tax"
-              onChange={handlelabelChange}
-            />
-            :
-            <input
-              type="text"
-              name="tax"
-              value={total.tax}
-              id="subTotalinput"
-              onChange={(e) => {
-                handleChange(e, 0, "calculation");
-              }}
-            />
+          <section  style={{float: "right", marginBottom:"10px"}}>
+            <>
+              {
+                fieldsDisable.discountBtn?
+                  <section id="calculationLine">
+                    <input
+                      type="text"
+                      name="discount"
+                      value={tableContent.discount}
+                      id="discount"
+                      onChange={handlelabelChange}
+                    />
+                    :
+                    <section style={{width: "30%", display: "flex"}}>
+                      <input
+                        type="text"
+                        name="discount"
+                        value={total.discount}
+                        id="disableCalculation"
+                        onChange={(e) => {
+                          handleChange(e, 0, "calculation");
+                        }}
+                      />
+                      <CloseIcon onClick={(e)=>{cancelDiscountTax(e, "discount")}} style={styles.cancelBtnCalculation}/>
+                    </section>
+                  </section>
+                  :
+                  <Button variant="text"
+                    style={styles.btnCaluclation}
+                    onClick={()=>{setFieldsDisable({...fieldsDisable, discountBtn: true})}}>
+                    <AddIcon style={IconsStyles.addIcons}/> 
+                  discount</Button>
+              }
+            </>
+            <>
+              {
+                fieldsDisable.taxBtn?
+                  <section id="calculationLine">
+                    <input
+                      type="text"
+                      name="tax"
+                      value={tableContent.tax}
+                      id="tax"
+                      onChange={handlelabelChange}
+                    />
+                    :
+                    <section style={{width: "30%", display: "flex"}}>
+                      <input
+                        type="text"
+                        name="tax"
+                        value={total.tax}
+                        id="disableCalculation"
+                        onChange={(e) => {
+                          handleChange(e, 0, "calculation");
+                        }}
+                      />
+                      <CloseIcon onClick={(e)=>{cancelDiscountTax(e, "tax")}} style={styles.cancelBtnCalculation}/>
+                    </section>
+                  </section>
+                  :
+                  <Button variant="text"
+                    style={styles.btnCaluclation}
+                    onClick={()=>{setFieldsDisable({...fieldsDisable, taxBtn: true})}}>
+                  <AddIcon style={IconsStyles.addIcons}/> tax</Button>
+              }
+            </>
           </section>
-
-          <section>
+          <section id="calculationLine">
             <input
               type="text"
               name="shiping"
@@ -416,18 +518,21 @@ const BiilingTable = (props) => {
               onChange={handlelabelChange}
             />
             :
-            <input
-              type="text"
-              name="shipping"
-              value={total.shipping}
-              id="subTotalinput"
-              onChange={(e) => {
-                handleChange(e, 0, "shipping");
-              }}
-            />
+            <section style={{display:"flex", width: "50%"}}>
+            <p style={{margin: 0, marginLeft: "10px"}}>{currencySelector.symbols===""? "":currencySelector.symbols}</p>
+              <input
+                type="text"
+                name="shipping"
+                value={total.shipping}
+                id="subTotalinput"
+                onChange={(e) => {
+                  handleChange(e, 0, "shipping");
+                }}
+              />
+            </section>
           </section>
 
-          <section>
+          <section  id="calculationLine">
             <input
               type="text"
               name="total"
@@ -436,15 +541,18 @@ const BiilingTable = (props) => {
               onChange={handlelabelChange}
             />
             :
-            <input
-              type="text"
-              name="total"
-              value={total.total}
-              id="subTotalinput"
-              onChange={(e) => {
-                handleChange(e, 0, "calculation");
-              }}
-            />
+            <section style={{display:"flex", width: "50%"}}>
+            <p style={{margin: 0, marginLeft: "10px"}}>{currencySelector.symbols===""? "":currencySelector.symbols}</p>
+              <input
+                type="text"
+                name="total"
+                value={total.total}
+                id="subTotalinput"
+                onChange={(e) => {
+                  handleChange(e, 0, "calculation");
+                }}
+              />
+            </section>
           </section>
 
           <section
@@ -452,7 +560,7 @@ const BiilingTable = (props) => {
               marginTop: "20px",
             }}
           >
-            <section>
+            <section id="calculationLine">
               <input
                 type="text"
                 name="amountPaid"
@@ -461,18 +569,21 @@ const BiilingTable = (props) => {
                 onChange={handlelabelChange}
               />
               :
-              <input
-                type="text"
-                name="amountPaid"
-                value={total.amountPaid}
-                id="subTotalinput"
-                onChange={(e) => {
-                  handleChange(e, 0, "amountPaid");
-                }}
-              />
+              <section style={{display:"flex", width: "50%"}}>
+                <p style={{margin: 0, marginLeft: "10px"}}>{currencySelector.symbols===""? "":currencySelector.symbols}</p>
+                <input
+                  type="text"
+                  name="amountPaid"
+                  value={total.amountPaid}
+                  id="subTotalinput"
+                  onChange={(e) => {
+                    handleChange(e, 0, "amountPaid");
+                  }}
+                />
+              </section>
             </section>
 
-            <section>
+            <section id="calculationLine">
               <input
                 type="text"
                 name="balanceDue"
@@ -481,15 +592,18 @@ const BiilingTable = (props) => {
                 onChange={handlelabelChange}
               />
               :
-              <input
-                type="text"
-                name="balanceDue"
-                value={total.balanceDue}
-                id="subTotalinput"
-                onChange={(e) => {
-                  handleChange(e, 0, "calculation");
-                }}
-              />
+              <section style={{display:"flex", width: "50%"}}>
+                <p style={{margin: 0, marginLeft: "10px"}}>{currencySelector.symbols===""? "":currencySelector.symbols}</p>
+                <input
+                  type="text"
+                  name="balanceDue"
+                  value={total.balanceDue}
+                  id="subTotalinput"
+                  onChange={(e) => {
+                    handleChange(e, 0, "calculation");
+                  }}
+                />
+              </section>
             </section>
           </section>
         </section>

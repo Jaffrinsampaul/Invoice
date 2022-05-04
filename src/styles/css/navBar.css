@@ -19,6 +19,7 @@
     flex-direction: column;
     width: 40%;
     justify-content: space-evenly;
+    margin-right: 20px;
 }
 
 #hashStyle{
@@ -31,7 +32,9 @@
     background-color: transparent;
     margin-right: 20px;
     color: #f4f3f8;
+    font-family: trenda;
     text-align: right;
+    font-size: medium;
     border-radius: 10px;
     height: 30px;
     position: relative;
@@ -92,6 +95,8 @@
     color: white;
     position: relative;
     bottom:  15px;
+    font-family: trenda;
+    font-size: medium;
 }
 
 #leftSection{
@@ -114,7 +119,7 @@
     border: #19bd9b;
     border-radius: 10px;
     height: 50px;
-    width: 90%;
+    width: 65%;
     margin-bottom: 5px;
     resize: none;
 }

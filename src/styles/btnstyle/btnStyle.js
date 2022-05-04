@@ -3,9 +3,13 @@ import { colors } from "../colors";
 
 export const styles ={
     addItem :{
-        position: "absolute",
-        left: 0,
-        marginTop: "20px"
+        marginLeft: "20px",
+        marginTop: "60px",
+        float: "left",
+        fontFamily: "trenda",
+        fontSize:"medium",
+        // width: "30px",
+        color: colors.defaultBlue
     },
     calender: {
         position: "absolute",
@@ -13,9 +17,9 @@ export const styles ={
         right: "13px",
     },
     addProfile:{
-        width: "150px",
+        width: "100px",
         height: "40px",
-        color: colors.black, 
+        color: colors.lightBlack, 
         backgroundColor: colors.lightBlue,
         position: "relative",
         top: "50px",
@@ -23,9 +27,10 @@ export const styles ={
     cancelBtn:{
         color: colors.darkBlue,
         position: "absolute",
+        
     },
     canceltableBtn: {
-        marginTop: "15px",
+        marginTop: "25px",
         marginLeft: "5px",
         color: colors.lightBlack
     },
@@ -115,5 +120,15 @@ export const styles ={
         float: "right",
         color: colors.lightGreen,
         fontSize: "12px",
+    },
+    btnCaluclation: {
+        color: colors.defaultBlue,
+        fontFamily: "trenda",
+        // fontSize:"large",
+    },
+    cancelBtnCalculation:{
+        color: colors.black,
+        width: "15px",
+        marginLeft: "10px"
     }
 }

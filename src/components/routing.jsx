@@ -9,7 +9,7 @@ const Routing =()=>{
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<LandingPage/>}/>
-                    <Route path="MyInvoice" element={<MyInvoice/>}/>
+                    <Route path="/MyInvoice" element={<MyInvoice/>}/>
                 </Routes>
             </BrowserRouter>
         </section>

@@ -1,6 +1,10 @@
 import * as React from 'react';
 import { useState } from 'react';
 
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { currency } from './redux/reduxHandling';
+
 import "../styles/css/currencyDialog.css" 
 import { colors } from '../styles/colors';
 import search from "../asset/search.svg"
@@ -16,6 +20,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 
 
+
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -25,6 +30,9 @@ export default function CurrencyDialogBox(props) {
   const [selectedCurrency, setSelectedCurrency]=useState({name: "Select Currency" , sym: ""})
 
   const [open, setOpen] = React.useState(false);
+
+  const currencySelector = useSelector(state=> state)
+  const dispatcher = useDispatch()
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -64,10 +72,8 @@ export default function CurrencyDialogBox(props) {
 
   const handleChange = async(e, string,  countryName, symbol)=>{
     const keys = string
-    console.log(keys)
     setSelectedCurrency({name: countryName, sym: symbol})
-    console.log("dialogBox",countryName, symbol)
-    await props.userData(keys, symbol)
+    dispatcher(currency(symbol))
     setOpen(false)
   }
 
@@ -83,8 +89,7 @@ export default function CurrencyDialogBox(props) {
           style={{margin: 0, marginTop: "0px"}}>
             {
               selectedCurrency.name === "Select Currency"? selectedCurrency.name : `${selectedCurrency.name} (${selectedCurrency.sym})` 
-            }
-        
+            }      
       </p>
       
       <select id="selectMenu" value={selectedCurrency.name} onClick={handleClickOpen}></select>
@@ -111,7 +116,9 @@ export default function CurrencyDialogBox(props) {
                       width: "400px",
                       value: obj.contryName,
                       name: "currencySymbol"
-                    }} id ={index} onClick={(e)=>{handleChange(e, "currencySymbol",  obj.contryName, obj.symbol)}}>
+                    }}
+                    key ={index}
+                     id ={index} onClick={(e)=>{handleChange(e, "currencySymbol",  obj.contryName, obj.symbol)}}>
                       <section>
                         {obj.contryName}
                       </section>
